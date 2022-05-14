@@ -1,23 +1,22 @@
-/* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { ToastDeleteComponent } from './toast-delete.component';
+import { ToastsComponent } from './toasts.component';
 
-describe('ToastDeleteComponent', () => {
-  let component: ToastDeleteComponent;
-  let fixture: ComponentFixture<ToastDeleteComponent>;
+describe('ToastsComponent', () => {
+  let component: ToastsComponent;
+  let fixture: ComponentFixture<ToastsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ToastDeleteComponent ]
+      declarations: [ ToastsComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ToastDeleteComponent);
+    fixture = TestBed.createComponent(ToastsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,0 +1,38 @@
+<div class="modals-area"></div>
+<div class="modals-box">
+  
+  <ng-container *ngIf="typeModals === 'delete'; else other">
+    <div class="modals-box__title">
+      Удалить сотрудника?
+    </div>
+    <div class="modals-box__button">
+      <button (click)="onCancellation.emit()">Нет</button>
+      <button (click)="onDeletePerson.emit(person)">Да</button>
+    </div>
+  </ng-container>
+
+  <ng-template #other>
+    <div class="modals-box__title">
+      {{typeModals === 'create'? 'Создать сотрудника': 'Редактировать сотрудника'}}
+    </div>
+    <div class="modals-box__input">
+      <input 
+        [(ngModel)]="person.firstName"
+        type="text" 
+        maxlength="24"
+        placeholder="Имя сотрудника"
+      >
+      <input 
+        [(ngModel)]="person.lastName"
+        type="text" 
+        maxlength="24"
+        placeholder="Фамилию сотрудника"
+      >
+    </div>
+    <span class="modals-box__info">{{info}}</span>
+    <div class="modals-box__button">
+      <button (click)="onCancellation.emit()">Отмена</button>
+      <button (click)="savePerson()">{{typeModals === 'create'? 'Создать': 'Сохранить'}}</button>
+    </div>
+  </ng-template>
+</div>

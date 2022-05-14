@@ -1,0 +1,4 @@
+<div class="content-toasts"  [ngClass]="{'content-toasts_success': colorToasts === 'green', 'content-toasts_warning': colorToasts === 'red'}">
+  <p>{{textMessage}}</p>
+  <button (click)="closeToasts.emit()"><img src="assets/icons/close.svg"></button>
+</div>

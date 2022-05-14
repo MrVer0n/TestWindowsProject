@@ -33,18 +33,21 @@ export class EmployeeService {
     return this.personList.filter(x => x.id === id).map(x => x);
   }
 
-  updatePerson(id: number, body: Person) {
-    this.personList.filter(x => x.id === id).map(x => {
+  updatePerson(body: Person) {
+    this.personList.filter(x => x.id === body.id).map(x => {
       x.firstName = body.firstName;
       x.lastName = body.lastName;
     });
   }
 
   addNewPerson(body:Person) {
+    body.id = Math.floor(Math.random() * 10000);
     this.personList.push(body);
   }
 
-  deletePerson(id: number) {
-    this.personList = this.personList.filter(function(elem) { return elem.id != id; });
+  deletePerson(id: number | undefined) {
+    console.log(id);
+    
+    if(id) {this.personList = this.personList.filter(function(elem) { return elem.id != id; });}
   }
 }

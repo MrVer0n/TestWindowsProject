@@ -1,5 +1,5 @@
 export interface Person {
-    id: number,
+    id: number | undefined,
     firstName: string,
     lastName: string,
 }

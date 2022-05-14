@@ -1,18 +1,22 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { EmployeePanelComponent } from './pages/employee/employee-panel.component'
-import { ToastComponent } from './pages/employee/components/toast/toast.component'
+import { ModalsComponent } from './pages/employee/components/modals/modals.component'
+import { ToastsComponent } from './pages/employee/components/toasts/toasts.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     EmployeePanelComponent,
-    ToastComponent,
+    ModalsComponent,
+    ToastsComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
