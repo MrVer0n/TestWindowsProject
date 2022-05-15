@@ -1,5 +1,5 @@
 export enum ColorToasts {
-    Warning = 'red',
-    Success = 'green',
-    Default = 'white',
+  Warning = 'red',
+  Success = 'green',
+  Default = 'white',
 }

@@ -1,53 +1,51 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+import { catchError, retry } from 'rxjs/operators';
+import { Observable } from 'rxjs/internal/Observable';
+import { of } from 'rxjs';
 
 import { Person } from '../models/person.model';
 
+const HOST = 'http://localhost:4100/';
+const URL = 'person/';
 @Injectable({ providedIn: 'root' })
 export class EmployeeService {
+  private personList: Person[] = [];
 
-  private personList:Person[] = [
-    {
-      id:1,
-      firstName: 'Bob',
-      lastName: 'Bobs',
-    },
-    {
-      id:2,
-      firstName: 'Mak',
-      lastName: 'Maks',
-    },
-    {
-      id:3,
-      firstName: 'Mil',
-      lastName: 'Mils',
-    },
-  ]
+  constructor(private _http: HttpClient) {}
 
-  constructor() { }
-
-  getPersonList() { 
-    return this.personList;
+  getPersonList(url: string = URL, params: { [param: string]: any }, providedHost: string = HOST): Observable<Person[]> {
+    return this._http.get<Person[]>(`${providedHost}${url}`, { params }).pipe(
+      retry(3),
+      catchError((e) => of(e))
+    );
   }
 
   getPersonForId(id: number) {
-    return this.personList.filter(x => x.id === id).map(x => x);
+    return this.personList.filter((x) => x.id === id).map((x) => x);
   }
 
-  updatePerson(body: Person) {
-    this.personList.filter(x => x.id === body.id).map(x => {
-      x.firstName = body.firstName;
-      x.lastName = body.lastName;
-    });
+  updatePerson(url: string = URL, body: Person, providedHost: string = HOST): Observable<Person> {
+    const id = body.id;
+    return this._http.put<Person>(`${providedHost}${url}/${id}`, body)
+      .pipe(
+        catchError(e => of(e))
+      );
   }
 
-  addNewPerson(body:Person) {
-    body.id = Math.floor(Math.random() * 10000);
-    this.personList.push(body);
+  addNewPerson<T>(url: string = URL, body: Person, providedHost: string = HOST, params = {}): Observable<Person> {
+    return this._http.post<Person>(`${providedHost}${url}`, body, params)
+      .pipe(
+        catchError(e => of(e))
+      );
   }
 
-  deletePerson(id: number | undefined) {
-    console.log(id);
-    
-    if(id) {this.personList = this.personList.filter(function(elem) { return elem.id != id; });}
+  deletePerson(url: string = URL, person: Person, providedHost: string = HOST): Observable<Person> {
+    const id = person.id;
+    return this._http.delete<Person>(`${providedHost}${url}/${id}`, {}).pipe(
+      retry(3),
+      catchError((e) => of(e))
+    );
   }
 }

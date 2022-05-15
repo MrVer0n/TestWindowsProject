@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
-import { EmployeeService } from './services/employee-api.service'
+import { first } from 'rxjs';
+
+import { EmployeeService } from './services/employee-api.service';
 import { TypeModals } from './enums/type-modals.enum';
 import { ColorToasts } from './enums/color-toasts.enum';
 import { Person } from './models/person.model';
@@ -8,32 +10,40 @@ import { Person } from './models/person.model';
 @Component({
   selector: 'app-employee-panel',
   templateUrl: './employee-panel.component.html',
-  styleUrls: ['./employee-panel.component.scss']
+  styleUrls: ['./employee-panel.component.scss'],
 })
 export class EmployeePanelComponent implements OnInit {
-
   modalsIsActive = false;
   toastsIsActive = false;
-  textMessage = ''
+  textMessage = '';
   typeModals = TypeModals.Create;
   colorToasts = ColorToasts.Default;
-  newPerson:Person = {
+  newPerson: Person = {
     id: undefined,
     firstName: '',
     lastName: '',
-  }
+  };
   editablePerson = this.newPerson;
-  personList = this.employeeService.getPersonList();
+  personList: Person[] = [];
 
-  constructor(private employeeService: EmployeeService) { }
+  constructor(private employeeService: EmployeeService) {}
 
   ngOnInit() {
+    this.getPersonLost();
+  }
+
+  getPersonLost() {
+    this.employeeService
+      .getPersonList(undefined, {})
+      .pipe(first())
+      .subscribe((response: Person[]) => {
+        this.personList = response;
+      });
   }
 
   modalsCreate() {
     this.modalsIsActive = true;
     this.typeModals = TypeModals.Create;
-
   }
 
   modalsUpdate(person: Person) {
@@ -42,36 +52,48 @@ export class EmployeePanelComponent implements OnInit {
     this.typeModals = TypeModals.Update;
   }
 
+  onActionWithPerson(person: Person) {
+    if (person) {
+      if(person.id) {
+        this.employeeService.updatePerson(undefined, person).pipe(first())
+        .subscribe(() => {
+          this.getPersonLost();
+        });
+      } else {
+        this.employeeService.addNewPerson(undefined, person).pipe(first())
+        .subscribe(() => {
+          this.getPersonLost();
+        });
+      }
+      this.textMessage = 'Пользователь сохранён';
+      this.colorToasts = ColorToasts.Success;
+    }
+    this.toastsIsActive = true;
+    this.editablePerson = this.newPerson;
+    this.onCancellation();
+  }
+
   modalsDelete(person: Person) {
     this.editablePerson = person;
     this.modalsIsActive = true;
     this.typeModals = TypeModals.Delete;
   }
 
-  onActionWithPerson(person: Person) {
-    if(person) {
-      person.id ? this.employeeService.updatePerson(person) : this.employeeService.addNewPerson(person);
-      this.textMessage='Пользователь сохранён';
-      this.colorToasts = ColorToasts.Success;
-    }
-    this.toastsIsActive = true;
-    this.editablePerson = this.newPerson;
-    this.onCancellation();
-  }
   onDeletePerson(person: Person) {
-    console.log(person);
-    
-    if(person) {
-      this.employeeService.deletePerson(person.id)
-      this.textMessage='Пользователь удалён';
+    if (person) {
+      this.employeeService
+        .deletePerson(undefined, person)
+        .pipe(first())
+        .subscribe(() => {
+          this.getPersonLost();
+        });
+      this.textMessage = 'Пользователь удалён';
       this.colorToasts = ColorToasts.Success;
     }
     this.toastsIsActive = true;
     this.editablePerson = this.newPerson;
     this.onCancellation();
-    this.personList = this.employeeService.getPersonList();
   }
-  
 
   onCancellation() {
     this.editablePerson = this.newPerson;
@@ -81,5 +103,4 @@ export class EmployeePanelComponent implements OnInit {
   closeToasts() {
     this.toastsIsActive = false;
   }
-
 }

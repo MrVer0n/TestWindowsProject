@@ -5,19 +5,25 @@
       <th>Фамилия</th>
       <th>
         <button (click)="modalsCreate()" class="content-person__add-person">
-          <img src="assets/icons/person_add.svg">
+          <img src="assets/icons/person_add.svg" />
         </button>
       </th>
     </tr>
     <tr class="content-person__table-data" *ngFor="let person of personList">
-      <td>{{person.firstName}}</td>
-      <td>{{person.lastName}}</td>
+      <td>{{ person.firstName }}</td>
+      <td>{{ person.lastName }}</td>
       <td>
-        <button (click)="modalsUpdate(person)" class="content-person__edit-person">
-          <img src="assets/icons/edit.svg">
+        <button
+          (click)="modalsUpdate(person)"
+          class="content-person__edit-person"
+        >
+          <img src="assets/icons/edit.svg" />
         </button>
-        <button (click)="modalsDelete(person)" class="content-person__delete-person">
-          <img src="assets/icons/delete.svg">
+        <button
+          (click)="modalsDelete(person)"
+          class="content-person__delete-person"
+        >
+          <img src="assets/icons/delete.svg" />
         </button>
       </td>
     </tr>
@@ -25,7 +31,7 @@
 </div>
 <ng-container *ngIf="modalsIsActive">
   <div class="content-modals">
-    <app-modals 
+    <app-modals
       [typeModals]="typeModals"
       [editablePerson]="editablePerson"
       (onActionWithPerson)="onActionWithPerson($event)"
@@ -36,11 +42,10 @@
 </ng-container>
 
 <ng-container *ngIf="toastsIsActive">
-    <app-toasts 
-      (closeToasts)="closeToasts()"
-      [textMessage]="textMessage"
-      [colorToasts]="colorToasts"
-      time="4000"
-    ></app-toasts>
+  <app-toasts
+    (closeToasts)="closeToasts()"
+    [textMessage]="textMessage"
+    [colorToasts]="colorToasts"
+    time="4000"
+  ></app-toasts>
 </ng-container>
-
