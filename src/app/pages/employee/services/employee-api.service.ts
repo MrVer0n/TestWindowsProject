@@ -15,37 +15,43 @@ export class EmployeeService {
 
   constructor(private _http: HttpClient) {}
 
-  getPersonList(url: string = URL, params: { [param: string]: any }, providedHost: string = HOST): Observable<Person[]> {
-    return this._http.get<Person[]>(`${providedHost}${url}`, { params }).pipe(
+  getPersonList(url: string = URL, params: { [param: string]: any }, providedHost: string = HOST): Observable<Person[] | any> {
+    return this._http.get<Person[] | any>(`${providedHost}${url}`, { params })
+    .pipe(
       retry(3),
-      catchError((e) => of(e))
+      catchError((e) => of(e.status))
     );
   }
 
-  getPersonForId(id: number) {
-    return this.personList.filter((x) => x.id === id).map((x) => x);
-  }
-
-  updatePerson(url: string = URL, body: Person, providedHost: string = HOST): Observable<Person> {
-    const id = body.id;
-    return this._http.put<Person>(`${providedHost}${url}/${id}`, body)
-      .pipe(
-        catchError(e => of(e))
-      );
-  }
-
-  addNewPerson<T>(url: string = URL, body: Person, providedHost: string = HOST, params = {}): Observable<Person> {
-    return this._http.post<Person>(`${providedHost}${url}`, body, params)
-      .pipe(
-        catchError(e => of(e))
-      );
-  }
-
-  deletePerson(url: string = URL, person: Person, providedHost: string = HOST): Observable<Person> {
+  getPersonForId(url: string = URL, person: Person, providedHost: string = HOST): Observable<Person | any> {
     const id = person.id;
-    return this._http.delete<Person>(`${providedHost}${url}/${id}`, {}).pipe(
-      retry(3),
-      catchError((e) => of(e))
+    return this._http.get<Person | any>(`${providedHost}${url}/${id}`)
+      .pipe(
+        retry(3),
+        catchError(e => of(e.status))
+      );
+  }
+
+  updatePerson(url: string = URL, body: Person, providedHost: string = HOST): Observable<Person | any> {
+    const id = body.id;
+    return this._http.put<Person | any>(`${providedHost}${url}/${id}`, body)
+      .pipe(
+        catchError(e => of(e.status))
+      );
+  }
+
+  addNewPerson<T>(url: string = URL, body: Person, providedHost: string = HOST, params = {}): Observable<Person | any> {
+    return this._http.post<Person | any>(`${providedHost}${url}`, body, params)
+      .pipe(
+        catchError(e => of(e.status))
+      );
+  }
+
+  deletePerson(url: string = URL, person: Person, providedHost: string = HOST): Observable<Person | any> {
+    const id = person.id;
+    return this._http.delete<Person | any>(`${providedHost}${url}/${id}`, {})
+    .pipe(
+      catchError((e) => of(e.status))
     );
   }
 }

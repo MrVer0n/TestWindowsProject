@@ -54,19 +54,23 @@ export class EmployeePanelComponent implements OnInit {
 
   actionWithPerson(person: Person) {
     if (person) {
-      if(person.id) {
-        this.employeeService.updatePerson(undefined, person).pipe(first())
-        .subscribe(() => {
-          this.getPersonLost();
-        });
+      if (person.id) {
+        this.employeeService
+          .updatePerson(undefined, person)
+          .pipe(first())
+          .subscribe((response) => {
+            this.errorHandler(response, 1);
+            this.getPersonLost();
+          });
       } else {
-        this.employeeService.addNewPerson(undefined, person).pipe(first())
-        .subscribe(() => {
-          this.getPersonLost();
-        });
+        this.employeeService
+          .addNewPerson(undefined, person)
+          .pipe(first())
+          .subscribe((response) => {
+            this.errorHandler(response, 1);
+            this.getPersonLost();
+          });
       }
-      this.textMessage = 'Пользователь сохранён';
-      this.colorToasts = ColorToasts.Success;
     }
     this.toastsIsActive = true;
     this.editablePerson = this.newPerson;
@@ -84,15 +88,36 @@ export class EmployeePanelComponent implements OnInit {
       this.employeeService
         .deletePerson(undefined, person)
         .pipe(first())
-        .subscribe(() => {
+        .subscribe((response) => {
+          this.errorHandler(response, 0);
           this.getPersonLost();
         });
-      this.textMessage = 'Пользователь удалён';
-      this.colorToasts = ColorToasts.Success;
     }
     this.toastsIsActive = true;
     this.editablePerson = this.newPerson;
     this.cancellationModals();
+  }
+
+  //requestType: 0 - удаление, 1 - сохранение
+  errorHandler(statusCods: Person | Person[], requestType: number) {
+    if (typeof statusCods === 'number') {
+      switch (statusCods) {
+        case 400:
+          this.textMessage = 'Неверный запрос!';
+          break;
+        case 404:
+          this.textMessage = 'Работник не найден!';
+          break;
+        default:
+          this.textMessage = 'Что то пошло не так!';
+          break;
+      }
+      this.colorToasts = ColorToasts.Warning;
+    } else {
+      this.textMessage =
+        requestType === 0 ? 'Пользователь удалён' : 'Пользователь сохранён';
+      this.colorToasts = ColorToasts.Success;
+    }
   }
 
   cancellationModals() {
