@@ -34,9 +34,9 @@
     <app-modals
       [typeModals]="typeModals"
       [editablePerson]="editablePerson"
-      (onActionWithPerson)="onActionWithPerson($event)"
-      (onCancellation)="onCancellation()"
-      (onDeletePerson)="onDeletePerson($event)"
+      (actionWithPerson)="actionWithPerson($event)"
+      (cancellationModals)="cancellationModals()"
+      (deletePerson)="deletePerson($event)"
     ></app-modals>
   </div>
 </ng-container>

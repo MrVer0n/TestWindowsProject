@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { TypeModals } from '../../enums/type-modals.enum';
 import { Person } from '../../models/person.model';
@@ -7,12 +7,12 @@ import { Person } from '../../models/person.model';
   templateUrl: './modals.component.html',
   styleUrls: ['./modals.component.scss'],
 })
-export class ModalsComponent {
+export class ModalsComponent implements OnInit {
   @Input() typeModals!: TypeModals;
   @Input() editablePerson!: Person;
-  @Output() onCancellation = new EventEmitter();
-  @Output() onActionWithPerson = new EventEmitter();
-  @Output() onDeletePerson = new EventEmitter();
+  @Output() cancellationModals = new EventEmitter();
+  @Output() actionWithPerson = new EventEmitter();
+  @Output() deletePerson = new EventEmitter();
 
   info = '';
   person: Person = {
@@ -30,7 +30,7 @@ export class ModalsComponent {
 
   savePerson() {
     if (this.person.firstName.length && this.person.lastName.length) {
-      this.onActionWithPerson.emit(this.person);
+      this.actionWithPerson.emit(this.person);
     } else {
       this.info = 'Заполните все поля';
     }

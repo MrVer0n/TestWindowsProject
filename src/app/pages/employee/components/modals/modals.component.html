@@ -3,8 +3,8 @@
   <ng-container *ngIf="typeModals === 'delete'; else other">
     <div class="modals-box__title">Удалить сотрудника?</div>
     <div class="modals-box__button">
-      <button (click)="onCancellation.emit()">Нет</button>
-      <button (click)="onDeletePerson.emit(person)">Да</button>
+      <button (click)="cancellationModals.emit()">Нет</button>
+      <button (click)="deletePerson.emit(person)">Да</button>
     </div>
   </ng-container>
 
@@ -32,7 +32,7 @@
     </div>
     <span class="modals-box__info">{{ info }}</span>
     <div class="modals-box__button">
-      <button (click)="onCancellation.emit()">Отмена</button>
+      <button (click)="cancellationModals.emit()">Отмена</button>
       <button (click)="savePerson()">
         {{ typeModals === "create" ? "Создать" : "Сохранить" }}
       </button>

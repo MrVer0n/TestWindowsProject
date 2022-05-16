@@ -52,7 +52,7 @@ export class EmployeePanelComponent implements OnInit {
     this.typeModals = TypeModals.Update;
   }
 
-  onActionWithPerson(person: Person) {
+  actionWithPerson(person: Person) {
     if (person) {
       if(person.id) {
         this.employeeService.updatePerson(undefined, person).pipe(first())
@@ -70,7 +70,7 @@ export class EmployeePanelComponent implements OnInit {
     }
     this.toastsIsActive = true;
     this.editablePerson = this.newPerson;
-    this.onCancellation();
+    this.cancellationModals();
   }
 
   modalsDelete(person: Person) {
@@ -79,7 +79,7 @@ export class EmployeePanelComponent implements OnInit {
     this.typeModals = TypeModals.Delete;
   }
 
-  onDeletePerson(person: Person) {
+  deletePerson(person: Person) {
     if (person) {
       this.employeeService
         .deletePerson(undefined, person)
@@ -92,10 +92,10 @@ export class EmployeePanelComponent implements OnInit {
     }
     this.toastsIsActive = true;
     this.editablePerson = this.newPerson;
-    this.onCancellation();
+    this.cancellationModals();
   }
 
-  onCancellation() {
+  cancellationModals() {
     this.editablePerson = this.newPerson;
     this.modalsIsActive = false;
   }
