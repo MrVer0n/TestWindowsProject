@@ -2,9 +2,10 @@
 <div class="modals-box">
   <ng-container *ngIf="typeModals === 'delete'; else other">
     <div class="modals-box__title">Удалить сотрудника?</div>
+    <div class="modals-box__person-name">{{person.firstName}} {{person.lastName}}</div>
     <div class="modals-box__button">
-      <button (click)="cancellationModals.emit()">Нет</button>
-      <button (click)="deletePerson.emit(person)">Да</button>
+      <button class="modals-box__close" (click)="cancellationModals.emit()">Нет</button>
+      <button class="modals-box__accept delete-button" (click)="deletePerson.emit(person)">Да</button>
     </div>
   </ng-container>
 
@@ -32,8 +33,8 @@
     </div>
     <span class="modals-box__info">{{ info }}</span>
     <div class="modals-box__button">
-      <button (click)="cancellationModals.emit()">Отмена</button>
-      <button (click)="savePerson()">
+      <button class="modals-box__close" (click)="cancellationModals.emit()">Отмена</button>
+      <button class="modals-box__accept" (click)="savePerson()">
         {{ typeModals === "create" ? "Создать" : "Сохранить" }}
       </button>
     </div>
